@@ -18,14 +18,14 @@ public class ReadDataFromCSV {
                 .option("header", true)
                 .schema(new StructType(new StructField[]{DataTypes.createStructField("name", DataTypes.StringType,true),
                         DataTypes.createStructField("age",DataTypes.IntegerType,true)}))
-                .load("/Users/xingshulin/IdeaProjects/sparkMLtranning/datasouces/people.csv");
+                .load("/Users/xingshulin/IdeaProjects/sparkMLtranning/datasources/people.csv");
 
         people.show();
-        people.select(people.col("name")).write().mode(SaveMode.Overwrite).format("parquet").save("/Users/xingshulin/IdeaProjects/sparkMLtranning/datasouces/people_names.parquet");
+        people.select(people.col("name")).write().mode(SaveMode.Overwrite).format("parquet").save("/Users/xingshulin/IdeaProjects/sparkMLtranning/datasources/people_names.parquet");
         System.out.println("filter name success.");
 
         System.out.println("read again from parquet...");
-        Dataset<Row> peopleNamesFromParquet = spark.read().format("parquet").load("/Users/xingshulin/IdeaProjects/sparkMLtranning/datasouces/people_names.parquet");
+        Dataset<Row> peopleNamesFromParquet = spark.read().format("parquet").load("/Users/xingshulin/IdeaProjects/sparkMLtranning/datasources/people_names.parquet");
         peopleNamesFromParquet.show();
 
     }

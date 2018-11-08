@@ -24,7 +24,7 @@ public class DataSourceUserLocalHive {
                 .option("header", true)
                 .schema(new StructType(new StructField[]{DataTypes.createStructField("name", DataTypes.StringType, true),
                         DataTypes.createStructField("age", DataTypes.IntegerType, true)}))
-                .load("/Users/xingshulin/IdeaProjects/sparkMLtranning/datasouces/people.csv");
+                .load("/Users/xingshulin/IdeaProjects/sparkMLtranning/datasources/people.csv");
 
         // 创建数据库
         people.write()
