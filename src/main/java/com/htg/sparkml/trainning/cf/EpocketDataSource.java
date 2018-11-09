@@ -18,7 +18,7 @@ import static org.apache.spark.sql.types.DataTypes.*;
 public class EpocketDataSource {
 
     private static final String PATH = EpocketDataSource.class.getClassLoader().getResource("").getPath()
-            + "/datasources/epocket/";
+            + "datasources/epocket/";
 
     private static final StructType SCHEMA = DataTypes.createStructType(new StructField[]{
             DataTypes.createStructField("_uid", StringType, false),
