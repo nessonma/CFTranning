@@ -2,8 +2,10 @@ package com.htg.sparkml.trainning.cf;
 
 import org.apache.spark.ml.recommendation.ALS;
 import org.apache.spark.ml.recommendation.ALSModel;
-import org.apache.spark.sql.*;
-import org.apache.spark.sql.streaming.OutputMode;
+import org.apache.spark.sql.Dataset;
+import org.apache.spark.sql.Row;
+import org.apache.spark.sql.SaveMode;
+import org.apache.spark.sql.SparkSession;
 import org.apache.spark.sql.types.DataTypes;
 
 /**
@@ -17,6 +19,8 @@ public class AlsApplication {
         SparkSession sparkSession = SparkSession.builder()
                 .config("spark.sql.objectHashAggregate.sortBased.fallbackThreshold", 1024 * 1024)
                 .appName("epocket CF demo").master("local[2]").getOrCreate();
+
+        sparkSession.sparkContext().setLogLevel("warn");
 
         // _uid _type _nid _views  id  user_id  nid
         Dataset<Row> mainContent = EpocketDataSource.getMainContent(sparkSession);
@@ -39,11 +43,17 @@ public class AlsApplication {
         ALSModel model = als.fit(tranning);
         model.setColdStartStrategy("drop");
 
-        Dataset<Row> rowDataset1 = model.recommendForAllUsers(1);
+        Dataset<Row> rowDataset1 = model.recommendForAllUsers(3);
+
+        mainContent.write()
+                .format("parquet")
+                .mode(SaveMode.Overwrite)
+                .save("main_content.parquet");
+
         rowDataset1.write()
                 .format("parquet")
                 .mode(SaveMode.Overwrite)
-                .save("/Users/xingshulin/IdeaProjects/sparkMLtranning/spark-warehouse/recommendations.parquet");
+                .save("recommendations.parquet");
 
         sparkSession.stop();
     }
