@@ -2,8 +2,10 @@ package com.htg.sparkml.trainning.cf;
 
 import org.apache.spark.ml.recommendation.ALS;
 import org.apache.spark.ml.recommendation.ALSModel;
-import org.apache.spark.sql.*;
-import org.apache.spark.sql.streaming.OutputMode;
+import org.apache.spark.sql.Dataset;
+import org.apache.spark.sql.Row;
+import org.apache.spark.sql.SaveMode;
+import org.apache.spark.sql.SparkSession;
 import org.apache.spark.sql.types.DataTypes;
 
 /**
@@ -27,8 +29,7 @@ public class AlsApplication {
 
         Dataset<Row>[] datasets = rowDataset.randomSplit(new double[]{0.8, 0.2});
         Dataset<Row> tranning = datasets[0];
-        Dataset<Row> test = datasets[1];
-        test.show(20);
+
         ALS als = new ALS()
                 .setMaxIter(5)
                 .setRegParam(0.01)
@@ -40,6 +41,12 @@ public class AlsApplication {
         model.setColdStartStrategy("drop");
 
         Dataset<Row> rowDataset1 = model.recommendForAllUsers(1);
+
+        mainContent.write()
+                .format("parquet")
+                .mode(SaveMode.Overwrite)
+                .save("/Users/xingshulin/IdeaProjects/sparkMLtranning/spark-warehouse/main_content.parquet");
+
         rowDataset1.write()
                 .format("parquet")
                 .mode(SaveMode.Overwrite)
