@@ -7,6 +7,8 @@
     <groupId>com.huangtiangang.demo</groupId>
     <artifactId>sparkML-tranning</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
     <build>
         <plugins>
             <plugin>

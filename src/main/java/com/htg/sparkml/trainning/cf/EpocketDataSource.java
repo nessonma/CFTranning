@@ -17,8 +17,7 @@ import static org.apache.spark.sql.types.DataTypes.*;
 
 public class EpocketDataSource {
 
-    private static final String PATH = EpocketDataSource.class.getClassLoader().getResource("").getPath()
-            + "datasources/epocket/";
+    private static final String PATH = "/Users/xingshulin/IdeaProjects/sparkMLtranning/datasources/epocket/";
 
     private static final StructType SCHEMA = DataTypes.createStructType(new StructField[]{
             DataTypes.createStructField("_uid", StringType, false),
@@ -28,8 +27,8 @@ public class EpocketDataSource {
     });
 
     static Dataset<Row> getMainContent(SparkSession sparkSession) {
-        Dataset<Row> mainContents = getDataFromCsv(sparkSession, PATH + "page_view_1_2018-09-02_2018-09-30.csv");
-        Dataset<Row> quanContents = getDataFromCsv(sparkSession, PATH + "page_view_2_2018-09-02_2018-09-30.csv");
+        Dataset<Row> mainContents = getDataFromCsv(sparkSession, PATH + "page_view_1_2018-09-02_2018-09-09.csv");
+        Dataset<Row> quanContents = getDataFromCsv(sparkSession, PATH + "page_view_2_2018-09-02_2018-09-09.csv");
         Dataset<Row> union = mainContents.union(quanContents);
         Dataset<Row> rowDataset = attachIdCol(sparkSession, union);
         Dataset<Row> rowDataset1 = attachUidCol(sparkSession, rowDataset);
